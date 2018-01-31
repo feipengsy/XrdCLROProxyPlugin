@@ -46,7 +46,11 @@ ProxyRWPrefixFile::Open(const std::string& url,
   }
 
   pFile = new XrdCl::File(false);
-  std::string open_url = ConstructFinalUrl(url);
+
+  std::string open_url = url;
+  if (flags == OpenFlags::Read) {
+    open_url = ConstructFinalUrl(url);
+  }
   st = pFile->Open(open_url, flags, mode, handler, timeout);
 
   if (st.IsOK()) {
