@@ -66,7 +66,7 @@ ProxyRWFactory::~ProxyRWFactory() {}
 XrdCl::FilePlugIn*
 ProxyRWFactory::CreateFile(const std::string& url)
 {
-  return static_cast<XrdCl::FilePlugIn*>(new ProxyPrefixFile());
+  return static_cast<XrdCl::FilePlugIn*>(new ProxyRWPrefixFile());
 }
 
 //------------------------------------------------------------------------------
