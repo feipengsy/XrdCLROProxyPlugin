@@ -169,13 +169,11 @@ private:
   //!
   //! @return list of excluded domains
   //----------------------------------------------------------------------------
-  std::list<std::string> GetExclDomains() const;
+  std::list<std::string> GetInclDomains() const;
 
   //----------------------------------------------------------------------------
   //! Construct final URL if there is a proxy prefix URL specified and if the
-  //! exclusion list is satisfied
-  //!
-  //! @param orig_url original url
+  //! inclusion list is satisfied
   //!
   //! @return final URL
   //----------------------------------------------------------------------------

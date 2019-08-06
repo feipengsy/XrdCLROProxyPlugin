@@ -106,23 +106,20 @@ ProxyRWPrefixFile::trim(const std::string& in) const
   */
 }
 
-//------------------------------------------------------------------------------
-// Get list of domains which are NOT to be prefixed
-//------------------------------------------------------------------------------
 std::list<std::string>
-ProxyRWPrefixFile::GetExclDomains() const
+ProxyRWPrefixFile::GetInclDomains() const
 {
-  std::string excl_domains = (getenv("XROOT_PROXY_EXCL_DOMAINS") ?
-                              getenv("XROOT_PROXY_EXCL_DOMAINS") : "");
+  std::string incl_domains = (getenv("XROOT_PROXY_INCL_DOMAINS") ?
+                              getenv("XROOT_PROXY_INCL_DOMAINS") : "");
 
-  if (excl_domains.empty()) {
+  if (incl_domains.empty()) {
     return std::list<std::string>();
   }
 
   char delim = ',';
   std::string item;
   std::list<std::string> lst;
-  std::stringstream ss(excl_domains);
+  std::stringstream ss(incl_domains);
 
   while (getline(ss, item, delim)) {
     lst.push_back(trim(item));
@@ -143,8 +140,8 @@ ProxyRWPrefixFile::ConstructFinalUrl(const std::string& orig_surl) const
   log->Debug(1, "url=%s, prefix_url=%s", orig_surl.c_str(), url_prefix.c_str());
 
   if (!url_prefix.empty()) {
-    bool exclude = false;
-    std::list<std::string> lst_excl = GetExclDomains();
+    bool include = false;
+    std::list<std::string> lst_incl = GetInclDomains();
     XrdCl::URL orig_url(orig_surl);
     std::string orig_host = orig_url.GetHostId();
     // Remove port if present
@@ -156,19 +153,19 @@ ProxyRWPrefixFile::ConstructFinalUrl(const std::string& orig_surl) const
 
     orig_host = GetFqdn(orig_host);
 
-    for (std::list<std::string>::iterator it_excl = lst_excl.begin();
-         it_excl != lst_excl.end(); ++it_excl) {
-      if (url_prefix.size() < it_excl->size()) {
+    for (std::list<std::string>::iterator it_incl = lst_incl.begin();
+         it_incl != lst_incl.end(); ++it_incl) {
+      if (url_prefix.size() < it_incl->size()) {
         continue;
       }
 
-      if (std::equal(it_excl->rbegin(), it_excl->rend(), orig_host.rbegin())) {
-        exclude = true;
+      if (std::equal(it_incl->rbegin(), it_incl->rend(), orig_host.rbegin())) {
+        include = true;
         break;
       }
     }
 
-    if (!exclude) {
+    if (include) {
       final_surl.insert(0, url_prefix);
     }
   }

@@ -37,8 +37,8 @@ ProxyRWFactory::ProxyRWFactory(const std::map<std::string, std::string>* config)
     std::list<std::string> lst_envs;
     lst_envs.push_back("XROOT_PROXY");
     lst_envs.push_back("xroot_proxy");
-    lst_envs.push_back("XROOT_PROXY_EXCL_DOMAINS");
-    lst_envs.push_back("xroot_proxy_excl_domains");
+    lst_envs.push_back("XROOT_PROXY_INCL_DOMAINS");
+    lst_envs.push_back("xroot_proxy_incl_domains");
 
     for (std::list<std::string>::iterator it_env = lst_envs.begin();
 	 it_env != lst_envs.end(); ++it_env) {
